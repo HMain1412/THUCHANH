@@ -1,5 +1,6 @@
 import express from "express";
-import userModel from '../Models/userModel';  // Import model để xử lý với CSDL hoặc logic nghiệp vụ
+import userModel from '../Models/userModel'  // Import model để xử lý với CSDL hoặc logic nghiệp vụ
+import bcrypt from 'bcryptjs'
 
 // Controller để lấy tất cả người dùng
 const getAllUser = async (req, res) => {

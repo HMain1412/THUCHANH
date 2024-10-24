@@ -1,5 +1,5 @@
 import express from 'express';
-import pool from '../config/db'; // Kết nối MySQL
+import pool from '../configs/db'; // Kết nối MySQL
 
 const router = express.Router();
 
