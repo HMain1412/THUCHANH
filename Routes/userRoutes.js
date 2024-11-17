@@ -36,7 +36,7 @@ router.get('/edit/:id', async (req, res) => {
     const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [userId]);
     if (rows.length > 0) {
       const user = rows[0];
-      // Giả sử bạn có một form để chỉnh sửa thông tin người dùng
+ 
       res.render('editUser', { user });
     } else {
       res.send('Người dùng không tồn tại.');

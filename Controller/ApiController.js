@@ -24,24 +24,25 @@ const deleteUser = async (req, res) => {
   try {
       // Gọi hàm xóa người dùng bằng id
       await userModel.deleteUserbyID(id);
+      // Trả về phản hồi thành công
       return res.status(200).json({
-          errCode: 0, 
+          errCode: 0, // 0 cho thành công
           message: "Xóa người dùng thành công",
-          id 
+          id // Trả về id của người dùng đã xóa
       })
   } catch (error) {
       // Nếu có lỗi xảy ra, trả về lỗi
       return res.status(500).json({
           errCode: 1,
           message: "Có lỗi xảy ra khi xóa người dùng",
-          error: error.message 
+          error: error.message // Có thể trả về thông điệp lỗi
       })
   }
 }
 const updateUser = async (req, res) => {
   const { id, username, password, fullname, address, sex, email } = req.body;
 
-  // Kiểm tra xem có id hay không
+  // Kiểm tra xem có id không
   if (!id) {
       return res.status(400).json({
           errCode: 1,
@@ -55,23 +56,23 @@ const updateUser = async (req, res) => {
       // Kiểm tra xem có cập nhật thành công không (nếu hàm updateUser trả về kết quả)
       if (result) {
           return res.status(200).json({
-              errCode: 0, 
+              errCode: 0, // 0 cho thành công
               message: "Cập nhật người dùng thành công",
-              id 
+              id // Trả về id của người dùng đã cập nhật
           });
       } else {
-          //Báo lỗi nếu không có bản ghi nào được cập nhật
+          // Nếu không có bản ghi nào được cập nhật, có thể báo lỗi
           return res.status(404).json({
               errCode: 1,
               message: "Không tìm thấy người dùng với ID đã cho",
           });
       }
   } catch (error) {
-      // Trả về lỗi nếu có lỗi xảy ra
+      // Nếu có lỗi xảy ra, trả về lỗi
       return res.status(500).json({
           errCode: 1,
           message: "Có lỗi xảy ra khi cập nhật người dùng",
-          error: error.message 
+          error: error.message // Có thể trả về thông điệp lỗi
       });
   }
 }
@@ -93,7 +94,7 @@ const insertUser = async (req, res) => {
         const isEmailExist = await userModel.isEmailExist(email);
 
         if (isUsernameExist || isEmailExist) {
-            return res.status(409).json({ 
+            return res.status(409).json({ // 409 Conflict
                 errCode: 1,
                 message: "Username hoặc email đã tồn tại.",
             });
@@ -104,7 +105,7 @@ const insertUser = async (req, res) => {
             username, password, fullname, address, sex, email
         );
 
-        return res.status(201).json({ 
+        return res.status(201).json({ // 201 Created
             errCode: 0,
             message: "Thêm người dùng thành công.",
         });
@@ -124,25 +125,25 @@ const loginUser = async (req, res) => {
     try {
         const user = await userModel.getUserByUsername(username);
         if (!user) {
-            return res.status(409).json({ 
+            return res.status(409).json({ // 409 Conflict
                 errCode: 1,
                 message: "Tài khoản và mật khẩu không đúng.",
             });
         }
         const match = await bcrypt.compare(password, user.password);
         if (!match) {
-            return res.status(409).json({ 
+            return res.status(409).json({ // 409 Conflict
                 errCode: 1,
                 message: "Tài khoản và mật khẩu không đúng.",
             });
         }
         // Chỉ lưu username và fullname vào session
         req.session.user = {
-            username: user.username,   
-            fullname: user.fullname,     
+            username: user.username,   // Giả sử username có trong user
+            fullname: user.fullname,     // Giả sử fullname có trong user
             role: user.role
         };
-        res.redirect('/'); // Hướng về trang chính
+        res.redirect('/'); // Chuyển hướng về trang chính
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).send('Internal Server Error');
@@ -165,5 +166,12 @@ const logoutUser = (req, res) => {
     });
 };
 
-
-export default { getAllUsers, detailUser, deleteUser, updateUser, insertUser, loginUser, logoutUser};
+const detailUserbyUsername = async (req, res) => {
+    let data = await userModel.getUserByUsername(req.params.username);
+    return res.status(200).json({
+      errCode: 1,
+      message: "Success",
+      deltauser: data
+    })
+  }
+export default { getAllUsers, detailUser, deleteUser, updateUser, insertUser, loginUser, logoutUser, detailUserbyUsername};

@@ -11,8 +11,9 @@ import { editUser } from '../Controller/UserController';
 import { updateUser } from '../Controller/UserController'; 
 import { createUser } from '../Controller/UserController'; 
 import { insertUser } from '../Controller/UserController'; 
+import ProductController from '../Controller/ProductController';
+import CategoryController from '../Controller/CategoryController';
 import { sessionMiddleware, getLoginPage, loginUser, getLogoutPage, authMiddleware, adminMiddleware, userMiddleware } from '../Controller/AuthController';
-  
 const router = express.Router()
 const initWebRoute = (app) => {
     router.get('/', getHomePage)
@@ -21,6 +22,11 @@ const initWebRoute = (app) => {
     router.get('/login', getLoginPage)
     router.post('/login', loginUser)
     router.get('/logout', getLogoutPage)
+    router.get('/product', ProductController.getAllProduct)
+    router.get('/deltaproduct/:id', ProductController.deltaProduct)
+    router.get('/category', CategoryController.getAllCategory)
+
+
     router.get('/getuser', authMiddleware, getAllUser)
     router.get('/deltauser/:id', authMiddleware, userMiddleware, viewUser)
     router.post('/deleteuser/', authMiddleware, userMiddleware, deleteUser)

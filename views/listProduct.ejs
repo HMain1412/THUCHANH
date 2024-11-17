@@ -1,0 +1,35 @@
+<h1><%= data.title %></h1>
+<table>
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Mã sản phẩm</th>
+            <th>Tên sản phẩm</th>
+            <th>Giá</th>
+            <th>Hình ảnh</th>
+            <th>Mô tả</th>
+            <th>Nhóm sản phẩm</th>
+            <th>Setting</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (data.rows && data.rows.length > 0) { %> <!-- Kiểm tra rows có dữ liệu không -->
+            <% data.rows.forEach((product, index) => { %> <!-- Lặp qua dsách sản phẩm -->
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= product.masp %></td> 
+                    <td><%= product.ten %></td> 
+                    <td><%= product.gia %> VND</td> 
+                    <td><img src="/images/product/<%= product.hinhanh %>" alt="<%= product.ten %>" width="100"></td> 
+                    <td><%= product.mota %></td> 
+                    <td><%= product.idnhom %></td>
+                    <td>
+                        <a href="/deltaproduct/<%= product.masp %>" class="icon">👁️</a>
+                    </td>
+                </tr>
+            <% }) %> <!-- Kết thúc vòng lặp -->
+        <% } else { %> 
+            <tr><td colspan="8">No products found.</td></tr> <!-- Nếu không có dữ liệu -->
+        <% } %>
+    </tbody>
+</table>
